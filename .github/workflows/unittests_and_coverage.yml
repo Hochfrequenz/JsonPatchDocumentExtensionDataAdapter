@@ -30,7 +30,7 @@ jobs:
         working-directory: ./JsonPatchDocumentExtensionDataAdapter
         run: dotnet restore
       - name: Install coverlet.msbuild in ChronoJsonDiffPatchTests
-        working-directory: ./JsonPatchDocumentExtensionDataAdapter/UnitTests
+        working-directory: ./JsonPatchDocumentExtensionDataAdapter/UnitTest
         run: dotnet add package coverlet.msbuild
       - name: Measure Test Coverage
         working-directory: ./JsonPatchDocumentExtensionDataAdapter
