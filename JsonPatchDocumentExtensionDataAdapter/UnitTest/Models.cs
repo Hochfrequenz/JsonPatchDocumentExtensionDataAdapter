@@ -66,7 +66,7 @@ internal class MyClassWithInconsistentJsonNameAttributes
     public int Foo { get; set; }
     public string? Bar { get; set; }
 
-    [System.Text.Json.Serialization.JsonPropertyName("thePropertyWithTheExtensionData")]
+    [System.Text.Json.Serialization.JsonPropertyName("thePropertyWithTheExtensionData")] // this name is inconsistent but not relevant as it's the extension data themselves
     // no newtonsoft attribute here
     [System.Text.Json.Serialization.JsonExtensionData]
     public IDictionary<string, object>? MyExtensionData { get; set; }
