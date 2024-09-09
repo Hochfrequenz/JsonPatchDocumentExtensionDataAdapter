@@ -1,7 +1,6 @@
 # JsonExtensionDataPatchDocumentAdapter
 
-.NET package that transforms operation paths in JsonPatchDocuments such that they match the models JsonExtensionData
-property
+is a .NET package that transforms operation paths in JsonPatchDocuments such that they match the annotated JsonExtensionData property.
 
 ## Installation
 
