@@ -9,16 +9,23 @@ namespace UnitTest;
 public class SimpleTests
 {
     [TestMethod]
-    [DataRow(true, false, false)]
-    [DataRow(true, false, true)]
-    [DataRow(false, true, true)]
-    [DataRow(false, true, false)]
-    [DataRow(false, false, true)]
-    [DataRow(false, false, false)]
+    [DataRow(true, false, false, true)]
+    [DataRow(true, false, true, true)]
+    [DataRow(false, true, true, true)]
+    [DataRow(false, true, false, true)]
+    [DataRow(false, false, true, true)]
+    [DataRow(false, false, false, true)]
+    [DataRow(true, false, false, false)]
+    [DataRow(true, false, true, false)]
+    [DataRow(false, true, true, false)]
+    [DataRow(false, true, false, false)]
+    [DataRow(false, false, true, false)]
+    [DataRow(false, false, false, false)]
     public void TestPatchingExtensionData(
         bool initialExtensionDataAreEmpty,
         bool overwriteExistingExtensionData,
-        bool useStringlyTypedPath
+        bool useStringlyTypedPath,
+        bool invokeAsExtensionMethod
     )
     {
         if (initialExtensionDataAreEmpty && overwriteExistingExtensionData)
@@ -88,9 +95,16 @@ public class SimpleTests
                     value = "xyz",
                 }
             );
-            myPatch = new JsonPatchDocumentExtensionDataAdapter<MyClass>(x =>
-                x.MyExtensionData
-            ).TransformDocument(myPatch, in myEntity);
+            if (invokeAsExtensionMethod)
+            {
+                myPatch = myPatch.Adapt(x => x.MyExtensionData, myEntity);
+            }
+            else
+            {
+                myPatch = new JsonPatchDocumentExtensionDataAdapter<MyClass>(x =>
+                    x.MyExtensionData
+                ).TransformDocument(myPatch, in myEntity);
+            }
         }
 
         myPatch.ApplyTo(myEntity);
