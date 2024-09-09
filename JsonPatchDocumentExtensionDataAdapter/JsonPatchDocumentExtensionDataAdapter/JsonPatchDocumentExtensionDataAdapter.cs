@@ -77,17 +77,19 @@ public class JsonPatchDocumentExtensionDataAdapter<TModel>
                     propertyInfo.GetCustomAttribute<JsonPropertyNameAttribute>();
                 var newtonsoftJsonPropertyAttribute =
                     propertyInfo.GetCustomAttribute<Newtonsoft.Json.JsonPropertyAttribute>();
-
                 var extensionDataAttribute =
                     propertyInfo.GetCustomAttribute<JsonExtensionDataAttribute>();
                 bool propertyJsonNameIsRelevant = extensionDataAttribute is null;
                 if (propertyJsonNameIsRelevant)
                 {
                     if (
-                        newtonsoftJsonPropertyAttribute is not null
+                        newtonsoftJsonPropertyAttribute?.PropertyName is not null
                         && systemTextJsonPropertyNameAttribute is null
-                        && newtonsoftJsonPropertyAttribute.PropertyName?.ToLower()
-                            != propertyInfo.Name.ToLower()
+                        && !string.Equals(
+                            newtonsoftJsonPropertyAttribute.PropertyName,
+                            propertyInfo.Name,
+                            StringComparison.CurrentCultureIgnoreCase
+                        )
                     )
                     {
                         throw new InconsistentPropertyNamesException(
@@ -115,10 +117,13 @@ public class JsonPatchDocumentExtensionDataAdapter<TModel>
                     }
 
                     if (
-                        newtonsoftJsonPropertyAttribute is not null
+                        newtonsoftJsonPropertyAttribute?.PropertyName is not null
                         && systemTextJsonPropertyNameAttribute is not null
-                        && newtonsoftJsonPropertyAttribute.PropertyName?.ToLower()
-                            != systemTextJsonPropertyNameAttribute.Name.ToLower()
+                        && !string.Equals(
+                            newtonsoftJsonPropertyAttribute.PropertyName!,
+                            systemTextJsonPropertyNameAttribute.Name,
+                            StringComparison.CurrentCultureIgnoreCase
+                        )
                     )
                     {
                         throw new InconsistentPropertyNamesException(
