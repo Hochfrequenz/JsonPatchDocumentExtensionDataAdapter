@@ -86,6 +86,8 @@ public class JsonPatchDocumentExtensionDataAdapter<TModel>
                     if (
                         newtonsoftJsonPropertyAttribute is not null
                         && systemTextJsonPropertyNameAttribute is null
+                        && newtonsoftJsonPropertyAttribute.PropertyName?.ToLower()
+                            != propertyInfo.Name.ToLower()
                     )
                     {
                         throw new InconsistentPropertyNamesException(
@@ -98,6 +100,11 @@ public class JsonPatchDocumentExtensionDataAdapter<TModel>
                     if (
                         systemTextJsonPropertyNameAttribute is not null
                         && newtonsoftJsonPropertyAttribute is null
+                        && !string.Equals(
+                            systemTextJsonPropertyNameAttribute.Name,
+                            propertyInfo.Name,
+                            StringComparison.CurrentCultureIgnoreCase
+                        )
                     )
                     {
                         throw new InconsistentPropertyNamesException(
@@ -110,19 +117,15 @@ public class JsonPatchDocumentExtensionDataAdapter<TModel>
                     if (
                         newtonsoftJsonPropertyAttribute is not null
                         && systemTextJsonPropertyNameAttribute is not null
+                        && newtonsoftJsonPropertyAttribute.PropertyName?.ToLower()
+                            != systemTextJsonPropertyNameAttribute.Name.ToLower()
                     )
                     {
-                        if (
-                            newtonsoftJsonPropertyAttribute.PropertyName
-                            != systemTextJsonPropertyNameAttribute.Name
-                        )
-                        {
-                            throw new InconsistentPropertyNamesException(
-                                propertyInfo.Name,
-                                newtonsoftJsonPropertyAttribute.PropertyName,
-                                systemTextJsonPropertyNameAttribute.Name
-                            );
-                        }
+                        throw new InconsistentPropertyNamesException(
+                            propertyInfo.Name,
+                            newtonsoftJsonPropertyAttribute.PropertyName,
+                            systemTextJsonPropertyNameAttribute.Name
+                        );
                     }
                 }
 
