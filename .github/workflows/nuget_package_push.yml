@@ -1,0 +1,40 @@
+name: Nuget Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  pushrelease:
+    runs-on: windows-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.100
+      - uses: olegtarasov/get-tag@v2.1
+        id: tagChrono
+        with:
+          tagRegex: "v(\\d+\\.\\d+\\.\\d+)"
+      - name: Build/Check for compile errors (dotnet build)
+        working-directory: "JsonPatchDocumentExtensionDataAdapter"
+        run: dotnet build --configuration Release
+      - name: Run Unit Tests (dotnet test)
+        working-directory: "JsonPatchDocumentExtensionDataAdapter"
+        run: dotnet test --configuration Release
+      - name: Create Package ChronoJsonDiffPatch (dotnet pack)
+        working-directory: "JsonPatchDocumentExtensionDataAdapter/JsonPatchDocumentExtensionDataAdapter"
+        run: dotnet pack ChronoJsonDiffPatch.csproj --configuration Release -p:PackageVersion="${{ steps.tagChrono.outputs.tag }}"
+      - name: Setup Nuget.exe
+        uses: warrenbuckley/Setup-Nuget@v1
+      - name: Nuget push ChronoJsonDiffPatch
+        working-directory: "JsonPatchDocumentExtensionDataAdapter/JsonPatchDocumentExtensionDataAdapter"
+        # token: https://github.com/Hochfrequenz/JsonPatchDocumentExtensionDataAdapter/settings/secrets/actions/NUGET_ORG_PUSH_TOKEN
+        # expires 2024-02-02
+        run: |
+          nuget setApiKey ${{ secrets.NUGET_ORG_PUSH_TOKEN }}
+          nuget push .\bin\Release\*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -NoSymbols

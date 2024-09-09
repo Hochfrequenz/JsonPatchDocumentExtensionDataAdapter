@@ -1,0 +1,37 @@
+name: Unittests and Coverage
+
+on: [push, pull_request]
+
+jobs:
+  unittest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ "8.0.401" ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Run Tests
+        working-directory: ./JsonPatchDocumentExtensionDataAdapter
+        run: dotnet test --configuration Release
+  coverage:
+    needs: unittest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.100
+      - name: Install dependencies
+        working-directory: ./JsonPatchDocumentExtensionDataAdapter
+        run: dotnet restore
+      - name: Install coverlet.msbuild in ChronoJsonDiffPatchTests
+        working-directory: ./JsonPatchDocumentExtensionDataAdapter/UnitTests
+        run: dotnet add package coverlet.msbuild
+      - name: Measure Test Coverage
+        working-directory: ./JsonPatchDocumentExtensionDataAdapter
+        run: dotnet test /p:Threshold=90 /p:Include=\"[*]ChronoJsonDiffPatch.*\" /p:ThresholdType=line /p:CollectCoverage=true /p:SkipAutoProps=true /p:CoverletOutputFormat=lcov --configuration Release
