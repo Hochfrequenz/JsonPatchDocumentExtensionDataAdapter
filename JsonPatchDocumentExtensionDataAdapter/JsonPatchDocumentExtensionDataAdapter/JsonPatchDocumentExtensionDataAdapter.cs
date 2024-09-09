@@ -77,45 +77,55 @@ public class JsonPatchDocumentExtensionDataAdapter<TModel>
                     propertyInfo.GetCustomAttribute<JsonPropertyNameAttribute>();
                 var newtonsoftJsonPropertyAttribute =
                     propertyInfo.GetCustomAttribute<Newtonsoft.Json.JsonPropertyAttribute>();
-                if (
-                    newtonsoftJsonPropertyAttribute is not null
-                    && systemTextJsonPropertyNameAttribute is null
-                )
-                {
-                    throw new InconsistentPropertyNamesException(
-                        propertyInfo.Name,
-                        newtonsoftJsonPropertyAttribute.PropertyName,
-                        null
-                    );
-                }
-                if (
-                    systemTextJsonPropertyNameAttribute is not null
-                    && newtonsoftJsonPropertyAttribute is null
-                )
-                {
-                    throw new InconsistentPropertyNamesException(
-                        propertyInfo.Name,
-                        null,
-                        systemTextJsonPropertyNameAttribute.Name
-                    );
-                }
-                if (
-                    newtonsoftJsonPropertyAttribute is not null
-                    && systemTextJsonPropertyNameAttribute is not null
-                )
+
+                var extensionDataAttribute =
+                    propertyInfo.GetCustomAttribute<JsonExtensionDataAttribute>();
+                bool propertyJsonNameIsRelevant = extensionDataAttribute is null;
+                if (propertyJsonNameIsRelevant)
                 {
                     if (
-                        newtonsoftJsonPropertyAttribute.PropertyName
-                        != systemTextJsonPropertyNameAttribute.Name
+                        newtonsoftJsonPropertyAttribute is not null
+                        && systemTextJsonPropertyNameAttribute is null
                     )
                     {
                         throw new InconsistentPropertyNamesException(
                             propertyInfo.Name,
                             newtonsoftJsonPropertyAttribute.PropertyName,
+                            null
+                        );
+                    }
+
+                    if (
+                        systemTextJsonPropertyNameAttribute is not null
+                        && newtonsoftJsonPropertyAttribute is null
+                    )
+                    {
+                        throw new InconsistentPropertyNamesException(
+                            propertyInfo.Name,
+                            null,
                             systemTextJsonPropertyNameAttribute.Name
                         );
                     }
+
+                    if (
+                        newtonsoftJsonPropertyAttribute is not null
+                        && systemTextJsonPropertyNameAttribute is not null
+                    )
+                    {
+                        if (
+                            newtonsoftJsonPropertyAttribute.PropertyName
+                            != systemTextJsonPropertyNameAttribute.Name
+                        )
+                        {
+                            throw new InconsistentPropertyNamesException(
+                                propertyInfo.Name,
+                                newtonsoftJsonPropertyAttribute.PropertyName,
+                                systemTextJsonPropertyNameAttribute.Name
+                            );
+                        }
+                    }
                 }
+
                 var jsonPropertyName =
                     newtonsoftJsonPropertyAttribute?.PropertyName
                     ?? systemTextJsonPropertyNameAttribute?.Name

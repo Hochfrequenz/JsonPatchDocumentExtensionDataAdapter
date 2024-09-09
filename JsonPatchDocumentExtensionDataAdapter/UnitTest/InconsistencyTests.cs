@@ -21,4 +21,14 @@ public class InconsistencyTests
             .Should()
             .ThrowExactly<InconsistentPropertyNamesException>();
     }
+
+    [TestMethod]
+    public void Inconsistent_Serialization_Settings_Raise_NoError_On_ExtensionData_Name()
+    {
+        var instantiatingWithInvalidAttributes = () =>
+            new JsonPatchDocumentExtensionDataAdapter<MyClassWithInconsistentJsonNameAttributes>(
+                x => x.MyExtensionData
+            );
+        instantiatingWithInvalidAttributes.Should().NotThrow<InconsistentPropertyNamesException>();
+    }
 }

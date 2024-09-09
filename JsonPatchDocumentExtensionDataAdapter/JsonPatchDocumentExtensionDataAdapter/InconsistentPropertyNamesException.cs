@@ -30,7 +30,7 @@ public class InconsistentPropertyNamesException : Exception
         string? systemTextPropertyName = null
     )
         : base(
-            $"The system.text.property name {systemTextPropertyName ?? "(unset)"} and the newtonsoft json property{newtonsoftJsonPropertyName ?? "(unset)"} name don't match for property {propertyName}. Because the logic of this package relies on System.Text.Json but ASP.NET Core relies on Newtonsoft internally, both have to match"
+            $"The system.text.property name {systemTextPropertyName ?? "(unset)"} and the newtonsoft json property {newtonsoftJsonPropertyName ?? "(unset)"} name don't match for property {propertyName}. Because the logic of this package relies on System.Text.Json but ASP.NET Core relies on Newtonsoft internally, both have to match"
         )
     {
         PropertyName = propertyName;
