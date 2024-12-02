@@ -1,6 +1,7 @@
 using FluentAssertions;
 using JsonExtensionDataPatchDocumentAdapter;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Exceptions;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 
 namespace UnitTest;
@@ -125,5 +126,30 @@ public class SimpleTests
                 .Should()
                 .Be("def");
         }
+    }
+
+    [TestMethod]
+    public void TestPatchingExtensionData_Recognizes_Invalid_Path()
+    {
+        var myEntity = new MyClassWithAList();
+        var myPatch = new JsonPatchDocument<MyClassWithAList>();
+        myPatch.Add(x => x.Foo, 42);
+        myPatch.Add(x => x.Bar, "fgh");
+        myPatch.Operations.Add(
+            new Operation<MyClassWithAList>
+            {
+                path = "/SomeList[0]",
+                op = "add",
+                value = 17,
+            }
+        );
+        var patchingOriginal = () => myPatch.ApplyTo(myEntity);
+        patchingOriginal.Should().Throw<JsonPatchException>();
+
+        var adaptedPatch = new JsonPatchDocumentExtensionDataAdapter<MyClassWithAList>(x =>
+            x.MyExtensionData
+        ).TransformDocument(myPatch, in myEntity);
+        adaptedPatch.ApplyTo(myEntity);
+        myEntity.MyExtensionData.Should().NotContainKey("SomeList[0]");
     }
 }
