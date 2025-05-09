@@ -24,6 +24,17 @@ internal class MyClassWithNesting
     public MyClass? MyModel { get; set; }
 }
 
+internal class MyClassWithAList
+{
+    public int? Foo { get; set; }
+    public string? Bar { get; set; }
+
+    public List<int>? SomeList { get; set; }
+
+    [System.Text.Json.Serialization.JsonExtensionData]
+    public IDictionary<string, object>? MyExtensionData { get; set; }
+}
+
 /// <summary>
 /// similar to <see cref="MyClass"/> but with JsonPropertyName attributes
 /// </summary>
