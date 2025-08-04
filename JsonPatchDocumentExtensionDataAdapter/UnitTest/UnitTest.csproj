@@ -11,10 +11,10 @@
 
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.4"/>
-        <PackageReference Include="AwesomeAssertions" Version="8.1.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
-        <PackageReference Include="MSTest.TestAdapter" Version="3.7.2"/>
-        <PackageReference Include="MSTest.TestFramework" Version="3.7.3"/>
+        <PackageReference Include="AwesomeAssertions" Version="9.1.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="3.10.0"/>
+        <PackageReference Include="MSTest.TestFramework" Version="3.10.0"/>
     </ItemGroup>
 
     <ItemGroup>
