@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using JsonExtensionDataPatchDocumentAdapter;
 using Newtonsoft.Json;
 
