@@ -1,4 +1,4 @@
-using FluentAssertions;
+using AwesomeAssertions;
 using JsonExtensionDataPatchDocumentAdapter;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Exceptions;
