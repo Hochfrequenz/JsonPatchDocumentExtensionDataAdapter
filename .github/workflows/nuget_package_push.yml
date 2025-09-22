@@ -34,7 +34,7 @@ jobs:
       - name: Nuget push JsonPatchDocumentExtensionDataAdapter
         working-directory: "JsonPatchDocumentExtensionDataAdapter/JsonPatchDocumentExtensionDataAdapter"
         # token: https://github.com/Hochfrequenz/JsonPatchDocumentExtensionDataAdapter/settings/secrets/actions/NUGET_ORG_PUSH_TOKEN
-        # expires 2025-09-09
+        # expires 2026-09-21
         run: |
           nuget setApiKey ${{ secrets.NUGET_ORG_PUSH_TOKEN }}
           nuget push .\bin\Release\*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -NoSymbols
