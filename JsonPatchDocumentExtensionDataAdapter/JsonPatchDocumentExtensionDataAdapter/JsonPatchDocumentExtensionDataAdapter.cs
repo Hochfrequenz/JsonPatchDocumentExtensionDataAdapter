@@ -258,6 +258,10 @@ public class JsonPatchDocumentExtensionDataAdapter<TModel>
             }
 
             var originalError = applyError!;
+            {
+                // if the operation looks like a list operation with [<index>] instead of /<index>
+                // then log a warning
+            }
             var extensionDataKey = GetPathRelativeToExtensionData(originalOperation.path);
             if (extensionDataAlreadyExists)
             {
